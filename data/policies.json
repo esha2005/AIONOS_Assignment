@@ -1,0 +1,68 @@
+[
+  {
+    "policy_id": "KB-01",
+    "title": "Password Reset",
+    "content": "PLACEHOLDER: Replace with official KB-01 Password Reset policy content from Assignment 2 Data Pack. This policy covers self-service password reset, requirements for manually assisted resets, multi-factor authentication requirements, and password complexity rules.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-02",
+    "title": "VPN Access",
+    "content": "PLACEHOLDER: Replace with official KB-02 VPN Access policy content from Assignment 2 Data Pack. This policy covers eligibility for VPN access, approval workflows, supported client software, and acceptable use of the corporate VPN.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-03",
+    "title": "Laptop Replacement",
+    "content": "PLACEHOLDER: Replace with official KB-03 Laptop Replacement policy content from Assignment 2 Data Pack. This policy covers hardware refresh cycles, damage vs normal wear determination, replacement cost responsibilities, and return procedures.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-04",
+    "title": "Software Installation",
+    "content": "PLACEHOLDER: Replace with official KB-04 Software Installation policy content from Assignment 2 Data Pack. This policy covers approved software list, request/approval workflows, restricted software categories, and license management.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-05",
+    "title": "Printer Troubleshooting",
+    "content": "PLACEHOLDER: Replace with official KB-05 Printer Troubleshooting policy content from Assignment 2 Data Pack. This policy covers standard diagnostic steps, toner replacement procedures, network printer mapping, and escalation criteria for hardware failures.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-06",
+    "title": "Email Mailbox Quota",
+    "content": "PLACEHOLDER: Replace with official KB-06 Email Mailbox Quota policy content from Assignment 2 Data Pack. This policy covers default mailbox sizes, quota increase request criteria, archiving procedures, and retention requirements.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-07",
+    "title": "Guest Wi-Fi Access",
+    "content": "PLACEHOLDER: Replace with official KB-07 Guest Wi-Fi Access policy content from Assignment 2 Data Pack. This policy covers guest network isolation, sponsor requirements, duration limits, and acceptable use terms for visitors.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-08",
+    "title": "Expense Software Access",
+    "content": "PLACEHOLDER: Replace with official KB-08 Expense Software Access policy content from Assignment 2 Data Pack. This policy covers access tiers (employee, manager, finance), onboarding/offboarding triggers, and manager approval delegation.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-09",
+    "title": "Security Incident Reporting",
+    "content": "PLACEHOLDER: Replace with official KB-09 Security Incident Reporting policy content from Assignment 2 Data Pack. This policy covers definition of a security incident, mandatory reporting timelines, contact points for the SOC, and employee responsibilities during an active incident. Also covers how to report phishing, suspicious email links and attachments, malware/ransomware infections, compromised accounts or credentials, unauthorized access, suspected data breach, data leakage, and other cybersecurity incidents via email or the internal security portal.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-10",
+    "title": "Work-From-Home Equipment",
+    "content": "PLACEHOLDER: Replace with official KB-10 Work-From-Home Equipment policy content from Assignment 2 Data Pack. This policy covers eligible equipment stipends, return of company property upon employment end, reimbursement process, and cybersecurity requirements for home networks.",
+    "source": "Assignment 2 Data Pack"
+  },
+  {
+    "policy_id": "KB-11",
+    "title": "Asset Management Policy Extract",
+    "content": "PLACEHOLDER: Replace with official Asset Management Policy Extract content from Assignment 2 Data Pack. This extract covers asset inventory tracking, asset assignment accountability, disposal procedures, and audit requirements.",
+    "source": "Assignment 2 Data Pack"
+  }
+]

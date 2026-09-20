@@ -1,0 +1,122 @@
+[
+  {
+    "request_id": "REQ-01",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp01@veridiancorp.example",
+    "date_opened": "2025-01-01",
+    "request": "PLACEHOLDER: Replace with official REQ-01 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-01 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-02",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp02@veridiancorp.example",
+    "date_opened": "2025-01-02",
+    "request": "PLACEHOLDER: Replace with official REQ-02 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-02 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-03",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp03@veridiancorp.example",
+    "date_opened": "2025-01-03",
+    "request": "PLACEHOLDER: Replace with official REQ-03 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-03 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-04",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp04@veridiancorp.example",
+    "date_opened": "2025-01-04",
+    "request": "PLACEHOLDER: Replace with official REQ-04 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-04 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-05",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp05@veridiancorp.example",
+    "date_opened": "2025-01-05",
+    "request": "PLACEHOLDER: Replace with official REQ-05 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-05 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-06",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp06@veridiancorp.example",
+    "date_opened": "2025-01-06",
+    "request": "PLACEHOLDER: Replace with official REQ-06 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-06 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-07",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp07@veridiancorp.example",
+    "date_opened": "2025-01-07",
+    "request": "PLACEHOLDER: Replace with official REQ-07 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-07 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-08",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp08@veridiancorp.example",
+    "date_opened": "2025-01-08",
+    "request": "PLACEHOLDER: Replace with official REQ-08 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-08 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-09",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp09@veridiancorp.example",
+    "date_opened": "2025-01-09",
+    "request": "PLACEHOLDER: Replace with official REQ-09 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-09 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-10",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp10@veridiancorp.example",
+    "date_opened": "2025-01-10",
+    "request": "PLACEHOLDER: Replace with official REQ-10 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-10 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-11",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp11@veridiancorp.example",
+    "date_opened": "2025-01-11",
+    "request": "PLACEHOLDER: Replace with official REQ-11 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-11 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-12",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp12@veridiancorp.example",
+    "date_opened": "2025-01-12",
+    "request": "PLACEHOLDER: Replace with official REQ-12 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-12 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-13",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp13@veridiancorp.example",
+    "date_opened": "2025-01-13",
+    "request": "PLACEHOLDER: Replace with official REQ-13 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-13 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-14",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp14@veridiancorp.example",
+    "date_opened": "2025-01-14",
+    "request": "PLACEHOLDER: Replace with official REQ-14 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-14 initial action taken so far."
+  },
+  {
+    "request_id": "REQ-15",
+    "employee_name": "PLACEHOLDER_NAME",
+    "employee_email": "emp15@veridiancorp.example",
+    "date_opened": "2025-01-15",
+    "request": "PLACEHOLDER: Replace with official REQ-15 employee request text from Assignment 2 Data Pack.",
+    "initial_action": "PLACEHOLDER: Replace with official REQ-15 initial action taken so far."
+  }
+]

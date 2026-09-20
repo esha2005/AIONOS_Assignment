@@ -1,0 +1,62 @@
+[
+  {
+    "ticket_id": "TK-1042",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1042 issue summary from Assignment 2 Data Pack.",
+    "status": "Open"
+  },
+  {
+    "ticket_id": "TK-1043",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1043 issue summary from Assignment 2 Data Pack.",
+    "status": "In Progress"
+  },
+  {
+    "ticket_id": "TK-1044",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1044 issue summary from Assignment 2 Data Pack.",
+    "status": "Open"
+  },
+  {
+    "ticket_id": "TK-1045",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1045 issue summary from Assignment 2 Data Pack.",
+    "status": "Pending"
+  },
+  {
+    "ticket_id": "TK-1046",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1046 issue summary from Assignment 2 Data Pack.",
+    "status": "Resolved"
+  },
+  {
+    "ticket_id": "TK-1047",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1047 issue summary from Assignment 2 Data Pack.",
+    "status": "Open"
+  },
+  {
+    "ticket_id": "TK-1048",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1048 issue summary from Assignment 2 Data Pack.",
+    "status": "In Progress"
+  },
+  {
+    "ticket_id": "TK-1049",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1049 issue summary from Assignment 2 Data Pack.",
+    "status": "Escalated"
+  },
+  {
+    "ticket_id": "TK-1050",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1050 issue summary from Assignment 2 Data Pack.",
+    "status": "Pending"
+  },
+  {
+    "ticket_id": "TK-1051",
+    "employee": "PLACEHOLDER_NAME",
+    "issue_summary": "PLACEHOLDER: Replace with official TK-1051 issue summary from Assignment 2 Data Pack.",
+    "status": "Closed"
+  }
+]
