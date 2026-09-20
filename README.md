@@ -7,17 +7,22 @@ Veridian AI
 An internal IT-support AI agent for Veridian Corp. The agent will eventually understand employee IT issues, retrieve relevant company policies, ask follow-up questions, resolve simple requests, escalate risky or unauthorized requests, create structured tickets, show source/policy references, and maintain an audit trail.
 
 ## Current Development Stage
-**Step 4 — Escalation, Ticket Creation & Audit Trail (SQLite)**
+**Prompt 5 — Complete: Streamlit UI, End-to-End Agent Flow**
 
-This stage adds:
-- **SQLite database** with `tickets` and `audit_logs` tables
-- **Ticket creation** only when the agent decides **ESCALATE**
-- **Audit log** entry for every agent decision
-- Three new API endpoints: `GET /tickets`, `GET /tickets/{id}`, `GET /audit-logs`
+All five initial implementation stages are complete:
+1. **Stage 1** — Knowledge base, policies, retrieval API
+2. **Stage 2** — LLM integration, structured AgentDecision output
+3. **Stage 3** — LangGraph agent workflow with RETRIEVE/REASON/DECIDE
+4. **Stage 4** — SQLite persistence: ticket creation + audit trail
+5. **Stage 5** — Streamlit chat UI with Dashboard, Tickets, Audit Trail pages
 
-The existing agent workflow is preserved. RESOLVE / ASK_CLARIFICATION / ESCALATE, with a new conditional branch: if ESCALATE → create structured ticket → create audit record → end; otherwise → audit record only → end.
-
-Not yet implemented: final Streamlit chat UI, audit dashboard pages.
+All core functionality is implemented:
+- FastAPI backend with `/retrieve-policy`, `/agent/chat`, `/tickets`, `/audit-logs` endpoints
+- LangGraph agent workflow (understand → retrieve → reason → decide → [ticket] → audit)
+- TF-IDF RAG policy retrieval with KB-01 through KB-11 policies
+- SQLite `veridian.db` with tickets table (IT-1001+ sequential) + audit_logs table
+- Three-page Streamlit UI: Ask IT Agent / Tickets / Audit Trail
+- Security routing: KB-09/phishing → assigned_team=Security, priority=HIGH
 
 ## Tech Stack
 - Python 3.11+
@@ -94,13 +99,39 @@ pip install -r requirements.txt
 ## How to Start FastAPI (Backend)
 ```bash
 # From project root
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn backend.main:app --reload
 ```
 
 Once running, visit:
 - Root: http://localhost:8000/
 - Health check: http://localhost:8000/health
 - Auto docs: http://localhost:8000/docs
+
+## Frontend UI Overview
+
+The Streamlit frontend (`frontend/app.py`) exposes three pages via the sidebar:
+
+1. **Ask IT Agent** (default)
+   - Main chat interface for submitting employee IT requests
+   - Input form + 4 pre-filled example prompts (VPN, Laptop, Phishing, Wi-Fi)
+   - Displays: decision badge (RESOLVE green / CLARIFY yellow / ESCALATE red), agent response, referenced policy tags, escalation reason, created ticket summary (if escalated)
+   - Sidebar live-indicator: "Backend online" (green) or "Backend unreachable" (red)
+
+2. **Tickets**
+   - Lists all SQLite-created tickets in a table with styled status/priority/team badges
+   - Each ticket has a collapsible expander showing issue details, category, escalation reason, source policies, and timestamps
+   - Empty state: "No tickets created yet. Escalate a request in the Ask IT Agent page."
+
+3. **Audit Trail**
+   - Lists every agent execution (one per chat run) as an auditable log
+   - Links each audit record back to a ticket (FK) when one was created
+   - Action column shows `AGENT_RESOLVED / AGENT_ASKED_CLARIFICATION / AGENT_ESCALATED`
+
+Robust frontend error handling:
+- **Backend connection down** → user-friendly warning with the exact `python -m uvicorn backend.main:app --reload` command
+- **HTTP 4xx / 5xx** → warning showing status code + `detail` field
+- **Invalid response shape** → "Unexpected response" message (no raw stack trace shown to user)
+- **Empty state** → friendly "No records yet" for Tickets/Audit pages
 
 ## How to Start Streamlit (Frontend)
 Open a second terminal with the virtual environment active:
@@ -319,6 +350,30 @@ curl http://localhost:8000/audit-logs
 
 The database file path can be overridden by setting the `VERIDIAN_DB_PATH` environment variable; the default is `<project>/veridian.db`.
 
-## Next Steps (Not Yet Implemented)
-- Full Streamlit chat UI
-- Audit dashboard pages
+## Demo Examples
+
+Run the backend + frontend, then try these three scenarios in the Ask IT Agent page to verify all decision paths:
+
+### A. Normal Request — VPN Expired (RESOLVE)
+> *"My VPN credentials have expired."*
+- **Expected Decision:** RESOLVE (green badge)
+- **Expected Policy:** KB-02 (VPN Access)
+- **Expected Outcome:** Agent provides renewal instructions referencing KB-02; **no ticket** created; audit record written with `AGENT_RESOLVED`
+
+### B. Clarification Request — Laptop Issue (ASK_CLARIFICATION)
+> *"My laptop is not working."*
+- **Expected Decision:** ASK_CLARIFICATION (yellow badge)
+- **Expected Policy:** Agent asks a specific follow-up (e.g. "What is the make/model? What exactly happens?")
+- **Expected Outcome:** Agent cannot resolve due to insufficient info; **no ticket** created; audit record written with `AGENT_ASKED_CLARIFICATION`
+
+### C. Security Request — Phishing Email (ESCALATE)
+> *"I received a phishing email asking for my password."*
+- **Expected Decision:** ESCALATE (red badge)
+- **Expected Policy:** KB-09 (Phishing & Suspicious Emails / Security Incidents)
+- **Expected Outcome:** Ticket created (format IT-XXXX sequential, starting IT-1001); assigned_team = **Security**, priority = **HIGH**, status = OPEN; linked audit record written with `AGENT_ESCALATED`
+
+### D. Guest Wi-Fi (RESOLVE — another quick test)
+> *"A visitor needs Wi-Fi access for a meeting tomorrow."*
+- **Expected Decision:** RESOLVE
+- **Expected Policy:** KB-07 (Guest Wi-Fi Access)
+- **Expected Outcome:** Agent instructs the employee to submit a Guest Wi-Fi Request via the IT Portal 24h in advance; no ticket created.

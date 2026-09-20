@@ -8,13 +8,6 @@ PAGE_ASK = "Ask IT Agent"
 PAGE_TICKETS = "Tickets"
 PAGE_AUDIT = "Audit Trail"
 
-EXAMPLE_PROMPTS = [
-    "My VPN credentials have expired",
-    "I received a phishing email",
-    "My printer is not working",
-    "I need software that is not in the approved catalog",
-]
-
 DECISION_STYLES = {
     "RESOLVE": {"icon": "✅", "color": "#16a34a", "label": "Resolved"},
     "ASK_CLARIFICATION": {"icon": "❓", "color": "#d97706", "label": "Clarification Needed"},
@@ -198,27 +191,11 @@ def render_ask_page() -> None:
     with st.form("chat_form", clear_on_submit=False):
         query = st.text_area(
             "Your IT request",
-            placeholder="Example: My VPN credentials expired and I can't connect.",
+            placeholder="Type your IT issue or request here. For example: My VPN credentials expired and I can't connect.",
             height=110,
             label_visibility="collapsed",
         )
         submitted = st.form_submit_button("🔍 Ask IT Agent", type="primary", use_container_width=True)
-
-    st.markdown(
-        "<div style='margin-top: 4px; color: #64748b; font-size: 13px; font-weight: 600;'>"
-        "💡 Try one of these examples:</div>",
-        unsafe_allow_html=True,
-    )
-
-    ec = st.columns(2)
-    for i, ex in enumerate(EXAMPLE_PROMPTS):
-        with ec[i % 2]:
-            if st.button(f"› {ex}", key=f"ex_{i}", use_container_width=True):
-                st.session_state["_prefill"] = ex
-                st.rerun()
-
-    if st.session_state.get("_prefill"):
-        st.session_state["_prefill"] = None
 
     if submitted:
         message = (query or "").strip()
@@ -519,11 +496,6 @@ def render_audit_page() -> None:
     _render_audits_html_table(audits)
 
 
-def _prefill_helper() -> None:
-    if st.session_state.get("_prefill"):
-        return
-
-
 def main() -> None:
     page_config()
     page = render_sidebar()
@@ -531,8 +503,6 @@ def main() -> None:
 
     if "last_chat" not in st.session_state:
         st.session_state["last_chat"] = None
-    if "_prefill" not in st.session_state:
-        st.session_state["_prefill"] = None
 
     if page == PAGE_ASK:
         render_ask_page()

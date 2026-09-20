@@ -48,6 +48,7 @@ class TicketSummary(BaseModel):
     ticket_id: str
     status: str
     assigned_team: str
+    priority: Optional[str] = None
 
 
 class AgentChatResponse(BaseModel):
@@ -192,6 +193,7 @@ def agent_chat(req: AgentChatRequest):
             ticket_id=str(ticket_obj.get("ticket_id", "")),
             status=str(ticket_obj.get("status", "OPEN")),
             assigned_team=str(ticket_obj.get("assigned_team", "Human IT Review")),
+            priority=ticket_obj.get("priority"),
         )
 
     return AgentChatResponse(
