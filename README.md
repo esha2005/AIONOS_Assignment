@@ -113,7 +113,7 @@ The Streamlit frontend (`frontend/app.py`) exposes three pages via the sidebar:
 
 1. **Ask IT Agent** (default)
    - Main chat interface for submitting employee IT requests
-   - Input form + 4 pre-filled example prompts (VPN, Laptop, Phishing, Wi-Fi)
+   - Clean input form with no pre-filled example suggestions
    - Displays: decision badge (RESOLVE green / CLARIFY yellow / ESCALATE red), agent response, referenced policy tags, escalation reason, created ticket summary (if escalated)
    - Sidebar live-indicator: "Backend online" (green) or "Backend unreachable" (red)
 
@@ -377,3 +377,16 @@ Run the backend + frontend, then try these three scenarios in the Ask IT Agent p
 - **Expected Decision:** RESOLVE
 - **Expected Policy:** KB-07 (Guest Wi-Fi Access)
 - **Expected Outcome:** Agent instructs the employee to submit a Guest Wi-Fi Request via the IT Portal 24h in advance; no ticket created.
+
+## Limitations & Assumptions
+- **Local DB Scope:** SQLite `veridian.db` is stored locally and created automatically on startup.
+- **RAG Vocabulary:** TF-IDF policy retrieval works over `data/policies.json` text; domain-specific acronyms or synonyms not in the policy text rely on the LLM's understanding.
+- **Single Turn Chat:** Each request is submitted independently to `/agent/chat`. Multi-turn conversational session history is maintained in audit logs rather than active chat memory.
+- **Authentication:** Employee identity is treated as an optional parameter (`employee_name`/`employee_email`) for internal network support.
+
+## Future Improvements
+- **Vector Database:** Upgrade TF-IDF to dense embeddings (e.g. ChromaDB or FAISS with OpenAI / Gemini embeddings) for hybrid semantic retrieval.
+- **Multi-turn Chat History:** Persist conversational state across messages using LangGraph checkpoints for full multi-turn clarification loops.
+- **Integrations:** Connect ticket creation directly to Jira, ServiceNow, or Zendesk APIs.
+- **Role-Based Access Control (RBAC):** Add authentication headers (OAuth2/JWT) for employee and IT admin roles.
+
