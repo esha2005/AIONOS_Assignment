@@ -55,6 +55,7 @@ Deployment: Vercel + Streamlit Community Cloud
 
 📁 Project Structure
 
+```text
 AIONOS_Assignment/
 ├── api/
 │   └── index.py
