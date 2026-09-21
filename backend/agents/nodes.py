@@ -53,7 +53,7 @@ def _call_gemini_structured(system_prompt: str, user_prompt: str) -> AgentDecisi
     api_key = _require_gemini_key()
     genai.configure(api_key=api_key)
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-3.6-flash")
     full_prompt = f"{system_prompt}\n\n---\nTASK INPUT:\n{user_prompt}\n\n---\nReturn ONLY the valid JSON object matching the schema above, no extra commentary, no markdown, no code fences."
 
     try:
@@ -122,13 +122,21 @@ def retrieve_policy_node(state: AgentState) -> AgentState:
     from backend.rag.retriever import PolicyRetriever
 
     query = (state.get("user_query") or "").strip()
-    if not query:
+    history = state.get("history") or []
+    
+    # Combine history user messages with query for comprehensive retrieval context
+    user_msgs = [h.get("content", "") for h in history if h.get("role") in ("user", "human")]
+    if query:
+        user_msgs.append(query)
+    combined_query = " ".join(user_msgs).strip()
+
+    if not combined_query:
         state["retrieved_policies"] = []
         return state
 
     try:
         retriever = PolicyRetriever()
-        res = retriever.retrieve(query=query, top_k=3)
+        res = retriever.retrieve(query=combined_query, top_k=3)
     except Exception as exc:
         state["retrieved_policies"] = []
         state["error"] = f"Retrieval failed: {exc}"
@@ -138,7 +146,15 @@ def retrieve_policy_node(state: AgentState) -> AgentState:
     return state
 
 
-def _build_user_prompt(query: str, policies: List[Dict[str, Any]]) -> str:
+def _build_user_prompt(query: str, policies: List[Dict[str, Any]], history: Optional[List[Dict[str, str]]] = None) -> str:
+    history_section = ""
+    if history:
+        history_lines = []
+        for msg in history:
+            role = "Employee" if msg.get("role") in ("user", "human") else "Agent"
+            history_lines.append(f"{role}: {msg.get('content', '')}")
+        history_section = "Prior Conversation History:\n" + "\n".join(history_lines) + "\n\n"
+
     if not policies:
         policies_section = "[No relevant company policy was retrieved for this request.]"
     else:
@@ -153,7 +169,8 @@ def _build_user_prompt(query: str, policies: List[Dict[str, Any]]) -> str:
             )
         policies_section = "\n".join(parts)
     return (
-        f"Employee request:\n{query}\n\n"
+        f"{history_section}"
+        f"Latest Employee request/response:\n{query}\n\n"
         f"Retrieved company policies (use only these):\n{policies_section}"
     )
 
@@ -174,7 +191,12 @@ def reason_node(
         state["source_policy_ids"] = []
         return state
 
-    user_prompt = _build_user_prompt(query, state.get("retrieved_policies") or [])
+    user_prompt = _build_user_prompt(
+        query,
+        state.get("retrieved_policies") or [],
+        history=state.get("history"),
+    )
+
 
     try:
         structured: AgentDecision = provider(SYSTEM_PROMPT, user_prompt)
@@ -183,18 +205,7 @@ def reason_node(
         raise
     except LLMCallError as exc:
         state["error"] = f"LLM failure: {exc}"
-        state["decision"] = "ESCALATE"
-        state["response"] = (
-            "Our IT AI agent encountered an issue processing your request. "
-            "The request has been escalated to IT support."
-        )
-        state["escalation_reason"] = f"LLM call error: {exc}"
-        state["source_policy_ids"] = [
-            p.get("policy_id", "")
-            for p in (state.get("retrieved_policies") or [])
-            if p.get("policy_id")
-        ]
-        return state
+        raise
 
     state["intent"] = structured.intent or state.get("intent", "")
     state["decision"] = structured.decision
@@ -269,9 +280,12 @@ def create_ticket_node(state: AgentState) -> AgentState:
             escalation_reason=state.get("escalation_reason"),
             source_policy_ids=list(state.get("source_policy_ids") or []),
             category=category,
+            employee_name=state.get("employee_name"),
+            employee_email=state.get("employee_email"),
             intent=state.get("intent") or "",
             status="OPEN",
         )
+
     except Exception as exc:  # pragma: no cover - unlikely
         state["error"] = f"Ticket creation failed: {exc}"
         return state

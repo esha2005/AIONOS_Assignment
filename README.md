@@ -109,29 +109,27 @@ Once running, visit:
 
 ## Frontend UI Overview
 
-The Streamlit frontend (`frontend/app.py`) exposes three pages via the sidebar:
+The Streamlit frontend (`frontend/app.py`) exposes five interactive views via the polished sidebar:
 
-1. **Ask IT Agent** (default)
-   - Main chat interface for submitting employee IT requests
-   - Clean input form with no pre-filled example suggestions
-   - Displays: decision badge (RESOLVE green / CLARIFY yellow / ESCALATE red), agent response, referenced policy tags, escalation reason, created ticket summary (if escalated)
-   - Sidebar live-indicator: "Backend online" (green) or "Backend unreachable" (red)
+1. **💬 Ask IT Agent (Interactive Multi-Turn Chat)**
+   - Full conversational chat interface powered by `st.chat_message` and `st.chat_input`
+   - Real-time multi-turn conversation support: when the agent asks a clarification question (`ASK_CLARIFICATION`), the user can directly type their reply in the chat input
+   - Maintains full conversation context sent to backend `/agent/chat`
+   - Displays: decision badges (`RESOLVE` green, `ASK_CLARIFICATION` yellow, `ESCALATE` red), intent summaries, referenced policy tags, escalation reasons, and embedded Ticket Cards (`IT-XXXX`)
 
-2. **Tickets**
-   - Lists all SQLite-created tickets in a table with styled status/priority/team badges
-   - Each ticket has a collapsible expander showing issue details, category, escalation reason, source policies, and timestamps
-   - Empty state: "No tickets created yet. Escalate a request in the Ask IT Agent page."
+2. **🎫 Tickets Queue**
+   - Live SQLite Escalated Tickets + Historical Baseline Tickets (TK-1042 through TK-1051)
+   - Status, priority, and assigned team badges with detail drawer expanders
 
-3. **Audit Trail**
-   - Lists every agent execution (one per chat run) as an auditable log
-   - Links each audit record back to a ticket (FK) when one was created
-   - Action column shows `AGENT_RESOLVED / AGENT_ASKED_CLARIFICATION / AGENT_ESCALATED`
+3. **📜 Audit Trail**
+   - Real-time immutable audit records linking every turn, decision, and ticket
 
-Robust frontend error handling:
-- **Backend connection down** → user-friendly warning with the exact `python -m uvicorn backend.main:app --reload` command
-- **HTTP 4xx / 5xx** → warning showing status code + `detail` field
-- **Invalid response shape** → "Unexpected response" message (no raw stack trace shown to user)
-- **Empty state** → friendly "No records yet" for Tickets/Audit pages
+4. **📚 Knowledge Base**
+   - Interactive viewer for all 11 Veridian Corp IT Policies (KB-01 to KB-11) with live search
+
+5. **📋 Employee Requests Data Pack**
+   - Complete Data Pack list (REQ-01 to REQ-15) with 1-click "Test with Agent" buttons
+
 
 ## How to Start Streamlit (Frontend)
 Open a second terminal with the virtual environment active:

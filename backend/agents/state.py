@@ -1,4 +1,5 @@
-from typing import Any, List, Optional, TypedDict, Literal
+from typing import Any, Dict, List, Optional, TypedDict, Literal
+
 
 DecisionType = Literal["RESOLVE", "ASK_CLARIFICATION", "ESCALATE"]
 
@@ -38,6 +39,9 @@ class AuditRef(TypedDict, total=False):
 
 class AgentState(TypedDict, total=False):
     user_query: str
+    history: List[Dict[str, str]]
+    employee_name: Optional[str]
+    employee_email: Optional[str]
     intent: str
     retrieved_policies: List[RetrievedPolicyRef]
     decision: DecisionType

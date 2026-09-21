@@ -40,8 +40,17 @@ class RetrievePolicyResponse(BaseModel):
 DecisionType = str
 
 
+class ChatHistoryItem(BaseModel):
+    role: str
+    content: str
+
+
 class AgentChatRequest(BaseModel):
     message: str = Field(..., description="Employee IT support request")
+    history: Optional[List[ChatHistoryItem]] = Field(default=None, description="Prior conversation history")
+    employee_name: Optional[str] = Field(default=None, description="Employee name")
+    employee_email: Optional[str] = Field(default=None, description="Employee email")
+
 
 
 class TicketSummary(BaseModel):
@@ -106,6 +115,31 @@ def health_check():
     return {"status": "healthy"}
 
 
+@app.get("/policies")
+def get_policies_endpoint():
+    from backend.rag.knowledge_base import load_policies
+    return load_policies()
+
+
+@app.get("/employee-requests")
+def get_employee_requests_endpoint():
+    path = os.path.join(PROJECT_ROOT, "data", "employee_requests.json")
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+@app.get("/tickets-history")
+def get_tickets_history_endpoint():
+    path = os.path.join(PROJECT_ROOT, "data", "tickets.json")
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+
 # ============== RETRIEVAL ENDPOINT (Prompt 2) ==============
 @app.post("/retrieve-policy", response_model=RetrievePolicyResponse)
 def retrieve_policy(req: RetrievePolicyRequest):
@@ -167,8 +201,15 @@ def agent_chat(req: AgentChatRequest):
             detail=f"Failed to load agent module: {exc}",
         )
 
+    history_list = [h.dict() for h in req.history] if req.history else None
     try:
-        final_state = run_agent(user_query=message)
+        final_state = run_agent(
+            user_query=message,
+            history=history_list,
+            employee_name=req.employee_name,
+            employee_email=req.employee_email,
+        )
+
     except APIKeyMissingError as exc:
         raise HTTPException(
             status_code=500,

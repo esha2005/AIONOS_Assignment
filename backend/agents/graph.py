@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional
+
 
 from langgraph.graph import END, START, StateGraph
 
@@ -64,10 +65,16 @@ def build_agent_graph(llm_provider: Optional[LLMProvider] = None):
 
 def run_agent(
     user_query: str,
+    history: Optional[List[Dict[str, str]]] = None,
+    employee_name: Optional[str] = None,
+    employee_email: Optional[str] = None,
     llm_provider: Optional[LLMProvider] = None,
 ) -> Dict[str, Any]:
     initial_state: AgentState = {
         "user_query": (user_query or "").strip(),
+        "history": history or [],
+        "employee_name": employee_name,
+        "employee_email": employee_email,
         "intent": "",
         "retrieved_policies": [],
         "source_policy_ids": [],
@@ -75,3 +82,4 @@ def run_agent(
     graph = build_agent_graph(llm_provider=llm_provider)
     result = graph.invoke(initial_state)
     return result
+

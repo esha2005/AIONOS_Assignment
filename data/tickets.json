@@ -1,62 +1,62 @@
 [
   {
     "ticket_id": "TK-1042",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1042 issue summary from Assignment 2 Data Pack.",
-    "status": "Open"
+    "employee": "R. Verma",
+    "issue_summary": "VPN credential expired",
+    "status": "Resolved (closed)"
   },
   {
     "ticket_id": "TK-1043",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1043 issue summary from Assignment 2 Data Pack.",
-    "status": "In Progress"
+    "employee": "S. Iyer",
+    "issue_summary": "Laptop replacement (3.2 yrs old)",
+    "status": "Approved — pending fulfillment (active)"
   },
   {
     "ticket_id": "TK-1044",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1044 issue summary from Assignment 2 Data Pack.",
-    "status": "Open"
+    "employee": "A. Khan",
+    "issue_summary": "Non-catalog software request",
+    "status": "Pending Security review (active)"
   },
   {
     "ticket_id": "TK-1045",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1045 issue summary from Assignment 2 Data Pack.",
-    "status": "Pending"
+    "employee": "P. Joshi",
+    "issue_summary": "Mailbox quota increase",
+    "status": "Approved at 35GB (closed)"
   },
   {
     "ticket_id": "TK-1046",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1046 issue summary from Assignment 2 Data Pack.",
-    "status": "Resolved"
+    "employee": "M. Das",
+    "issue_summary": "Printer paper jam, floor 2",
+    "status": "Resolved (closed)"
   },
   {
     "ticket_id": "TK-1047",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1047 issue summary from Assignment 2 Data Pack.",
-    "status": "Open"
+    "employee": "K. Singh",
+    "issue_summary": "Home office equipment request",
+    "status": "Pending Finance (active)"
   },
   {
     "ticket_id": "TK-1048",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1048 issue summary from Assignment 2 Data Pack.",
-    "status": "In Progress"
+    "employee": "T. Rao",
+    "issue_summary": "Phishing email reported",
+    "status": "Escalated to Security — under investigation (active)"
   },
   {
     "ticket_id": "TK-1049",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1049 issue summary from Assignment 2 Data Pack.",
-    "status": "Escalated"
+    "employee": "V. Nambiar",
+    "issue_summary": "Password reset",
+    "status": "Resolved (closed)"
   },
   {
     "ticket_id": "TK-1050",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1050 issue summary from Assignment 2 Data Pack.",
-    "status": "Pending"
+    "employee": "J. Fernandes",
+    "issue_summary": "Admin access request",
+    "status": "Rejected — no business justification provided (closed)"
   },
   {
     "ticket_id": "TK-1051",
-    "employee": "PLACEHOLDER_NAME",
-    "issue_summary": "PLACEHOLDER: Replace with official TK-1051 issue summary from Assignment 2 Data Pack.",
-    "status": "Closed"
+    "employee": "L. Menon",
+    "issue_summary": "Guest Wi-Fi issued",
+    "status": "Resolved (closed)"
   }
 ]
