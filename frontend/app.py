@@ -1,3 +1,5 @@
+import os
+import json
 import streamlit as st
 import requests
 import html as _html
@@ -5,11 +7,11 @@ from typing import Any, Dict, List, Optional
 
 BACKEND_URL = "http://127.0.0.1:8000"
 
-PAGE_ASK = "💬 Ask IT Agent"
-PAGE_TICKETS = "🎫 Tickets Queue"
-PAGE_AUDIT = "📜 Audit Trail"
-PAGE_KB = "📚 Knowledge Base"
-PAGE_REQS = "📋 Employee Requests Data Pack"
+PAGE_ASK = "Ask IT Agent"
+PAGE_TICKETS = "Tickets"
+PAGE_AUDIT = "Audit Trail"
+PAGE_KB = "Knowledge Base"
+PAGE_REQS = "Employee Requests"
 
 DECISION_STYLES = {
     "RESOLVE": {"icon": "✅", "color": "#16a34a", "bg": "#dcfce7", "label": "Resolved"},
@@ -79,6 +81,36 @@ def _safe_get(url: str, timeout: int = 15) -> Any:
     return data
 
 
+def _get_policies() -> List[Dict[str, Any]]:
+    res = _safe_get(f"{BACKEND_URL}/policies", timeout=5)
+    if isinstance(res, list) and len(res) > 0:
+        return res
+    # Robust local fallback to data/policies.json
+    path = os.path.join("data", "policies.json")
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return []
+
+
+def _get_employee_requests() -> List[Dict[str, Any]]:
+    res = _safe_get(f"{BACKEND_URL}/employee-requests", timeout=5)
+    if isinstance(res, list) and len(res) > 0:
+        return res
+    # Robust local fallback to data/employee_requests.json
+    path = os.path.join("data", "employee_requests.json")
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return []
+
+
 def backend_down_warning() -> None:
     st.error(
         "Backend service is currently unreachable. Start it with:  \n"
@@ -95,82 +127,66 @@ def http_error_warning(status: int, detail: Optional[str] = None) -> None:
 
 
 def render_header() -> None:
-    st.markdown(
-        """
-        <div style="
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
-            padding: 22px 28px;
-            border-radius: 14px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        ">
-            <div style="display: flex; align-items: center; gap: 18px;">
-                <div style="
-                    width: 52px; height: 52px;
-                    background: rgba(255, 255, 255, 0.15);
-                    backdrop-filter: blur(10px);
-                    border-radius: 14px;
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 26px;
-                    border: 1px solid rgba(255, 255, 255, 0.25);
-                ">🛡️</div>
-                <div>
-                    <div style="font-size: 24px; font-weight: 800; tracking-tight: -0.02em;">
-                        Veridian Corp
-                    </div>
-                    <div style="font-size: 15px; opacity: 0.9; font-weight: 500;">
-                        AI IT Support & Resolution Agent
+    c1, c2 = st.columns([0.85, 0.15])
+    with c1:
+        st.markdown(
+            """
+            <div style="padding: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="
+                        width: 46px; height: 46px;
+                        background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
+                        border-radius: 12px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 22px;
+                        color: white;
+                    ">🛡️</div>
+                    <div>
+                        <div style="font-size: 22px; font-weight: 700; color: #0f172a;">
+                            Veridian Corp
+                        </div>
+                        <div style="font-size: 15px; color: #334155; font-weight: 600;">
+                            AI IT Support Agent
+                        </div>
                     </div>
                 </div>
+                <div style="margin-top: 8px; color: #475569; font-size: 14px;">
+                    Internal IT support, policy retrieval, and automated ticket resolution dashboard
+                </div>
             </div>
-            <div style="text-align: right; font-size: 12px; opacity: 0.8;">
-                <div>Assignment 2 Data Pack Verified</div>
-                <div>LangGraph + RAG Policy Engine</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
+    st.divider()
 
 
 def render_sidebar() -> str:
     with st.sidebar:
         st.markdown(
             """
-            <div style="padding: 10px 0 16px 0;">
-                <div style="font-size: 16px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-                    🛡️ Navigation
-                </div>
-                <div style="color: #64748b; font-size: 12px; margin-top: 2px;">
-                    Internal Support Dashboard
-                </div>
+            <div style="margin-bottom: 6px; font-size: 15px; font-weight: 700; color: #0f172a;">
+                🛡️ Veridian IT
+            </div>
+            <div style="color: #64748b; font-size: 12px; margin-bottom: 18px;">
+                Internal Support Dashboard
             </div>
             """,
             unsafe_allow_html=True,
         )
         
         page = st.radio(
-            "Main Menu",
+            "Navigation",
             [PAGE_ASK, PAGE_TICKETS, PAGE_AUDIT, PAGE_KB, PAGE_REQS],
             label_visibility="collapsed",
         )
         
         st.markdown("---")
         
-        # New Chat Button
-        if st.button("➕ Start New Chat Session", use_container_width=True, type="secondary"):
+        if st.button("Start New Chat", use_container_width=True):
             st.session_state["chat_messages"] = []
-            st.session_state["current_employee"] = None
             st.rerun()
 
         st.markdown("---")
-        
-        # System Stats & Status
-        st.markdown("<div style='font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px;'>SYSTEM MONITORING</div>", unsafe_allow_html=True)
         
         backend_online = False
         try:
@@ -181,30 +197,11 @@ def render_sidebar() -> str:
             backend_online = False
             
         if backend_online:
-            st.success("Backend API: Online", icon="🟢")
+            st.success("Backend online", icon="🟢")
         else:
-            st.error("Backend API: Offline", icon="🔴")
+            st.warning("Backend offline", icon="🔴")
 
-        # Quick stats fetch
-        tickets_count = 0
-        audits_count = 0
-        if backend_online:
-            tix = _safe_get(f"{BACKEND_URL}/tickets", timeout=3)
-            if isinstance(tix, list):
-                tickets_count = len(tix)
-            aud = _safe_get(f"{BACKEND_URL}/audit-logs", timeout=3)
-            if isinstance(aud, list):
-                audits_count = len(aud)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.metric("Tickets", tickets_count)
-        with c2:
-            st.metric("Audit Logs", audits_count)
-
-        st.caption(f"Endpoint: `{BACKEND_URL}`")
-        st.caption("Veridian AI v2.0 · Confidential")
-
+        st.caption(f"Backend: `{BACKEND_URL}`")
     return page
 
 
@@ -244,22 +241,21 @@ def _html_escape(text: Any) -> str:
 
 
 # ==============================================================================
-# PAGE 1: INTERACTIVE MULTI-TURN CHAT AGENT
+# PAGE 1: ASK IT AGENT
 # ==============================================================================
 def render_ask_page() -> None:
-    st.markdown("### 💬 Interactive IT Support Agent")
-    st.caption("Multi-turn conversational assistant. Ask any IT question, answer follow-up questions, and track resolution or ticket creation.")
+    st.subheader("Ask the IT Agent", anchor=False)
+    st.caption("Describe your IT issue below and the agent will look up company policies and resolve or escalate your request.")
 
     if "chat_messages" not in st.session_state:
         st.session_state["chat_messages"] = []
 
-    # Display Chat History Thread
     chat_container = st.container()
     with chat_container:
         if not st.session_state["chat_messages"]:
             st.info(
-                "👋 Hello! I am the Veridian AI Support Agent. Type your IT request below to get started.",
-                icon="🤖",
+                "Hello! I am the Veridian AI Support Agent. Type your IT request below to get started.",
+                icon="💬",
             )
         else:
             for msg in st.session_state["chat_messages"]:
@@ -298,7 +294,7 @@ def render_ask_page() -> None:
                                     margin-top: 10px;
                                 ">
                                     <div style="font-weight: 700; color: #0f172a; font-size: 13px;">
-                                        🎫 Escalated Ticket Created: <code>{ticket.get('ticket_id')}</code>
+                                        Escalated Ticket Created: <code>{ticket.get('ticket_id')}</code>
                                     </div>
                                     <div style="font-size: 12px; color: #475569; margin-top: 4px;">
                                         Assigned Team: <strong>{ticket.get('assigned_team')}</strong> | 
@@ -310,22 +306,18 @@ def render_ask_page() -> None:
                                 unsafe_allow_html=True,
                             )
 
-    # Chat Input
     user_input = st.chat_input("Type your IT request or reply to the agent...")
     
     if user_input:
         user_text = user_input.strip()
         if user_text:
-            # 1. Append user message
             st.session_state["chat_messages"].append({"role": "user", "content": user_text})
             
-            # 2. Build history for API
             history_payload = [
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state["chat_messages"][:-1]
             ]
             
-            # 3. Call backend /agent/chat
             with st.spinner("Agent is retrieving policies and reasoning..."):
                 resp = _safe_post(
                     f"{BACKEND_URL}/agent/chat",
@@ -346,7 +338,6 @@ def render_ask_page() -> None:
                 clarification = resp.get("clarification_question")
                 escalation_reason = resp.get("escalation_reason")
                 
-                # Determine display text for assistant
                 if decision == "RESOLVE":
                     assistant_text = response_text or "Your request has been resolved per company policy."
                 elif decision == "ASK_CLARIFICATION":
@@ -356,7 +347,6 @@ def render_ask_page() -> None:
                 else:
                     assistant_text = response_text or "Processing complete."
                 
-                # Append assistant message
                 st.session_state["chat_messages"].append({
                     "role": "assistant",
                     "content": assistant_text,
@@ -370,10 +360,10 @@ def render_ask_page() -> None:
 # PAGE 2: TICKETS QUEUE
 # ==============================================================================
 def render_tickets_page() -> None:
-    st.markdown("### 🎫 Tickets Queue")
-    st.caption("Comprehensive ticketing database showing active escalations and historical baseline records.")
+    st.subheader("Tickets Queue", anchor=False)
+    st.caption("All tickets created via escalated agent requests.")
 
-    t1, t2 = st.tabs(["⚡ Live Escalated Tickets (SQLite)", "📚 Historical Ticket Queue (Assignment baseline)"])
+    t1, t2 = st.tabs(["Live Escalated Tickets (SQLite)", "Historical Ticket Queue (Assignment Baseline)"])
     
     with t1:
         with st.spinner("Loading live tickets..."):
@@ -388,7 +378,7 @@ def render_tickets_page() -> None:
                 st.markdown(f"**{len(tickets)} live escalated ticket(s)**")
                 _render_tickets_html_table(tickets)
                 
-                with st.expander("🔍 View Live Ticket Details & Metadata"):
+                with st.expander("View Live Ticket Details"):
                     ids = [t["ticket_id"] for t in tickets]
                     sel = st.selectbox("Select Ticket ID", ids)
                     if sel:
@@ -463,10 +453,10 @@ def _render_baseline_tickets_table(tickets: List[Dict[str, Any]]) -> None:
 # PAGE 3: AUDIT TRAIL
 # ==============================================================================
 def render_audit_page() -> None:
-    st.markdown("### 📜 Audit Trail")
-    st.caption("Immutable system audit logs recording every agent execution turn, decision, and ticket linkage.")
+    st.subheader("Audit Trail", anchor=False)
+    st.caption("Complete log of every agent execution, decision, and escalation.")
 
-    with st.spinner("Loading audit records..."):
+    with st.spinner("Loading audit logs..."):
         audits = _safe_get(f"{BACKEND_URL}/audit-logs", timeout=15)
 
     if isinstance(audits, dict) and audits.get("_error") == "conn":
@@ -475,9 +465,9 @@ def render_audit_page() -> None:
 
     if isinstance(audits, list):
         if len(audits) == 0:
-            st.info("No audit logs recorded yet. Interact with the chat agent to generate audit entries.", icon="📭")
+            st.info("No audit records yet. Chat with the IT agent to generate entries.", icon="📭")
         else:
-            st.markdown(f"**{len(audits)} audit record(s) logged.**")
+            st.markdown(f"**{len(audits)} audit record(s) found.**")
             _render_audits_html_table(audits)
 
 
@@ -516,84 +506,99 @@ def _render_audits_html_table(audits: List[Dict[str, Any]]) -> None:
 # PAGE 4: KNOWLEDGE BASE VIEWER
 # ==============================================================================
 def render_kb_page() -> None:
-    st.markdown("### 📚 Veridian Corp Knowledge Base Policies")
-    st.caption("Official company policies retrieved during the RAG workflow (KB-01 to KB-11).")
+    st.subheader("Knowledge Base", anchor=False)
+    st.caption("Official Veridian Corp IT policies from data/policies.json used for agent RAG retrieval.")
 
-    with st.spinner("Loading Knowledge Base..."):
-        policies = _safe_get(f"{BACKEND_URL}/policies", timeout=15)
+    policies = _get_policies()
 
-    if isinstance(policies, dict) and policies.get("_error") == "conn":
-        backend_down_warning()
+    if not policies:
+        st.warning("No policies found in data/policies.json.")
         return
 
-    if isinstance(policies, list):
-        search = st.text_input("🔍 Search Policies", placeholder="e.g. VPN, Password, Laptop, Phishing, Printer...")
-        
-        filtered = policies
-        if search.strip():
-            kw = search.strip().lower()
-            filtered = [
-                p for p in policies
-                if kw in p.get("policy_id", "").lower()
-                or kw in p.get("title", "").lower()
-                or kw in p.get("content", "").lower()
-            ]
+    search_term = st.text_input("Search Policies", placeholder="Filter policies by title, ID, or keywords...", label_visibility="collapsed")
+    
+    filtered = policies
+    if search_term.strip():
+        kw = search_term.strip().lower()
+        filtered = [
+            p for p in policies
+            if kw in str(p.get("policy_id", "")).lower()
+            or kw in str(p.get("title", "")).lower()
+            or kw in str(p.get("content", "")).lower()
+        ]
 
-        st.markdown(f"**Showing {len(filtered)} policy document(s)**")
-        
-        for p in filtered:
-            with st.expander(f"📌 {p.get('policy_id')} — {p.get('title')}", expanded=True):
-                st.markdown(f"**Source:** `{p.get('source', 'Data Pack')}`")
-                st.info(p.get("content"))
+    st.markdown(f"**Showing {len(filtered)} policy document(s)**")
+    st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
+
+    for p in filtered:
+        pid = p.get("policy_id", "")
+        title = p.get("title", "")
+        content = p.get("content", "")
+        source = p.get("source", "Assignment 2 Data Pack")
+
+        with st.expander(f"{pid} — {title}", expanded=True):
+            st.markdown(f"**Policy ID:** `{pid}` &nbsp;|&nbsp; **Title:** {title} &nbsp;|&nbsp; **Source:** `{source}`", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 6px;'></div>", unsafe_allow_html=True)
+            st.info(content)
 
 
 # ==============================================================================
-# PAGE 5: EMPLOYEE REQUESTS DATA PACK RUNNER
+# PAGE 5: EMPLOYEE REQUESTS DATA PACK
 # ==============================================================================
 def render_reqs_page() -> None:
-    st.markdown("### 📋 Employee Requests Data Pack (REQ-01 to REQ-15)")
-    st.caption("Run any of the 15 official assignment requests through the agent workflow with one click.")
+    st.subheader("Employee Requests (Data Pack)", anchor=False)
+    st.caption("Official Assignment 2 test requests (REQ-01 through REQ-15) from data/employee_requests.json.")
 
-    with st.spinner("Loading Employee Requests..."):
-        reqs = _safe_get(f"{BACKEND_URL}/employee-requests", timeout=15)
+    reqs = _get_employee_requests()
 
-    if isinstance(reqs, list) and len(reqs) > 0:
-        for r in reqs:
-            rid = r.get("request_id")
-            emp = r.get("employee_name")
-            email = r.get("employee_email")
-            date = r.get("date_opened")
-            text = r.get("request")
-            action = r.get("initial_action")
-            
-            with st.container():
-                c1, c2 = st.columns([0.8, 0.2])
-                with c1:
-                    st.markdown(f"#### {rid}: {emp} (`{email}`)")
-                    st.caption(f"📅 Opened: {date} | Initial Action: {action}")
-                    st.warning(f"“{text}”")
-                with c2:
-                    if st.button(f"⚡ Test {rid}", key=f"btn_{rid}", use_container_width=True):
-                        st.session_state["chat_messages"] = [
-                            {"role": "user", "content": text}
-                        ]
-                        # Immediate API call
-                        with st.spinner("Running agent..."):
-                            resp = _safe_post(
-                                f"{BACKEND_URL}/agent/chat",
-                                {"message": text, "employee_name": emp, "employee_email": email},
-                                timeout=45,
-                            )
-                        decision = (resp.get("decision") or "").upper()
-                        resp_text = resp.get("response") or resp.get("clarification_question") or ""
-                        st.session_state["chat_messages"].append({
-                            "role": "assistant",
-                            "content": resp_text,
-                            "result": resp,
-                        })
-                        st.switch_page = PAGE_ASK
-                        st.rerun()
-                st.markdown("---")
+    if not reqs:
+        st.warning("No employee requests found in data/employee_requests.json.")
+        return
+
+    st.markdown(f"**{len(reqs)} official request(s) available**")
+    st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
+
+    for r in reqs:
+        rid = r.get("request_id", "")
+        emp_name = r.get("employee_name", "")
+        emp_email = r.get("employee_email", "")
+        date_opened = r.get("date_opened", "")
+        req_text = r.get("request", "")
+        initial_action = r.get("initial_action", "")
+
+        with st.expander(f"{rid} — {emp_name} ({emp_email})", expanded=False):
+            col_info, col_btn = st.columns([0.8, 0.2])
+            with col_info:
+                st.markdown(f"**Request ID:** `{rid}`")
+                st.markdown(f"**Employee:** {emp_name} (`{emp_email}`)")
+                st.markdown(f"**Date Opened:** {date_opened}")
+                st.markdown("**Request:**")
+                st.info(req_text)
+                st.markdown(f"**Initial Action:** `{initial_action}`")
+            with col_btn:
+                st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
+                if st.button(f"Run {rid} Agent", key=f"run_{rid}", use_container_width=True, type="primary"):
+                    st.session_state["chat_messages"] = [
+                        {"role": "user", "content": req_text}
+                    ]
+                    with st.spinner("Processing request through agent..."):
+                        resp = _safe_post(
+                            f"{BACKEND_URL}/agent/chat",
+                            {
+                                "message": req_text,
+                                "employee_name": emp_name,
+                                "employee_email": emp_email,
+                            },
+                            timeout=45,
+                        )
+                    resp_text = resp.get("response") or resp.get("clarification_question") or "Request processed."
+                    st.session_state["chat_messages"].append({
+                        "role": "assistant",
+                        "content": resp_text,
+                        "result": resp,
+                    })
+                    st.success(f"Executed {rid}! View results in Ask IT Agent page.")
+                    st.rerun()
 
 
 # ==============================================================================
@@ -621,7 +626,7 @@ def main() -> None:
             margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0;
             color: #94a3b8; font-size: 12px; text-align: center;
         ">
-            Veridian Corp · Internal IT Support AI Agent · Assignment 2 Data Pack Verified
+            Veridian Corp · Internal IT Support AI Agent · Data Pack Verified
         </div>
         """,
         unsafe_allow_html=True,
