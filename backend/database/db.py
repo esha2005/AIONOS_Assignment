@@ -10,7 +10,16 @@ def _default_db_path() -> str:
     if env_path:
         return os.path.abspath(env_path)
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    return os.path.abspath(os.path.join(project_root, "veridian.db"))
+    default_path = os.path.abspath(os.path.join(project_root, "veridian.db"))
+    try:
+        test_file = os.path.join(project_root, ".write_test")
+        with open(test_file, "w") as f:
+            f.write("test")
+        os.remove(test_file)
+        return default_path
+    except (PermissionError, OSError):
+        return "/tmp/veridian.db"
+
 
 
 def _resolve_path(override: Optional[str] = None) -> str:
