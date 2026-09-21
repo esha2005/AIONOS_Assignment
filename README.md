@@ -1,3 +1,5 @@
+
+```text
 Veridian AI — Internal IT Support Agent
 
 Agentic AI assistant for Veridian Corp employees to resolve IT issues using company policies, ask clarifying questions, escalate complex/risky requests, create tickets, and maintain an audit trail.
