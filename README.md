@@ -20,6 +20,7 @@ Agentic AI assistant for Veridian Corp employees to resolve IT issues using comp
 
 🔄 Agent Workflow
 
+```text
 Employee Request
       ↓
 Understand Request
