@@ -127,53 +127,86 @@ def http_error_warning(status: int, detail: Optional[str] = None) -> None:
 
 
 def render_header() -> None:
-    c1, c2 = st.columns([0.85, 0.15])
-    with c1:
-        st.markdown(
-            """
-            <div style="padding: 10px 0;">
-                <div style="display: flex; align-items: center; gap: 14px;">
-                    <div style="
-                        width: 46px; height: 46px;
-                        background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
-                        border-radius: 12px;
-                        display: flex; align-items: center; justify-content: center;
-                        font-size: 22px;
-                        color: white;
-                    ">🛡️</div>
-                    <div>
-                        <div style="font-size: 22px; font-weight: 700; color: #0f172a;">
-                            Veridian Corp
-                        </div>
-                        <div style="font-size: 15px; color: #334155; font-weight: 600;">
-                            AI IT Support Agent
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 8px; color: #475569; font-size: 14px;">
-                    Internal IT support, policy retrieval, and automated ticket resolution dashboard
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    st.divider()
+    st.markdown(
+        """
+        <style>
+        [data-testid="stHeader"] { display: none; }
+        [data-testid="stAppViewContainer"] > .main {
+            padding-top: 5.5rem;
+        }
+        [data-testid="stSidebar"] {
+            position: fixed;
+            top: 64px;
+            height: calc(100vh - 64px);
+            z-index: 100;
+        }
+        .veridian-fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 24px;
+            background: #0f172a;
+            border-bottom: 1px solid #26364e;
+            z-index: 101;
+        }
+        .veridian-fixed-header .logo {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: #1e3a8a;
+            color: #ffffff;
+            font-size: 18px;
+        }
+        .veridian-fixed-header .name {
+            color: #f8fafc;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .veridian-fixed-header .subtitle {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 1px;
+        }
+        .ask-title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 18px;
+            flex-wrap: nowrap;
+            margin-bottom: 18px;
+        }
+        .ask-title-row h3 {
+            margin: 0;
+            white-space: nowrap;
+        }
+        .ask-title-row p {
+            margin: 0;
+            white-space: nowrap;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        @media (max-width: 800px) {
+            .ask-title-row { display: block; }
+            .ask-title-row p { margin-top: 6px; white-space: normal; }
+        }
+        </style>
+        <div class="veridian-fixed-header">
+            <div class="logo">V</div>
+            <div><div class="name">Veridian IT</div><div class="subtitle">Internal Support</div></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_sidebar() -> str:
     with st.sidebar:
-        st.markdown(
-            """
-            <div style="margin-bottom: 6px; font-size: 15px; font-weight: 700; color: #0f172a;">
-                🛡️ Veridian IT
-            </div>
-            <div style="color: #64748b; font-size: 12px; margin-bottom: 18px;">
-                Internal Support Dashboard
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        
         page = st.radio(
             "Navigation",
             [PAGE_ASK, PAGE_TICKETS, PAGE_AUDIT, PAGE_KB, PAGE_REQS],
@@ -244,8 +277,15 @@ def _html_escape(text: Any) -> str:
 # PAGE 1: ASK IT AGENT
 # ==============================================================================
 def render_ask_page() -> None:
-    st.subheader("Ask the IT Agent", anchor=False)
-    st.caption("Describe your IT issue below and the agent will look up company policies and resolve or escalate your request.")
+    st.markdown(
+        """
+        <div class="ask-title-row">
+            <h3>Ask the IT Agent</h3>
+            <p>Describe your IT issue below and the agent will look up company policies and resolve or escalate your request.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     if "chat_messages" not in st.session_state:
         st.session_state["chat_messages"] = []
