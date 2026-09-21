@@ -5,7 +5,22 @@ import requests
 import html as _html
 from typing import Any, Dict, List, Optional
 
-BACKEND_URL = "http://127.0.0.1:8000"
+def _get_backend_url() -> str:
+    try:
+        if "BACKEND_URL" in st.secrets:
+            val = str(st.secrets["BACKEND_URL"]).strip()
+            if val:
+                return val.rstrip("/")
+    except Exception:
+        pass
+    env_url = os.environ.get("BACKEND_URL", "").strip()
+    if env_url:
+        return env_url.rstrip("/")
+    return "http://127.0.0.1:8000"
+
+
+BACKEND_URL = _get_backend_url()
+
 
 PAGE_ASK = "Ask IT Agent"
 PAGE_TICKETS = "Tickets"
